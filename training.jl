@@ -30,7 +30,6 @@ const moody = 0
 const a = [1,2]
 a[1] = 4
 
-
 # NAMING
 a = 1.0
 #    Type LaTeX equivalent (\varepsilon here) and press TAB
@@ -58,6 +57,9 @@ f = typeof(ε) # Returns interface of type
 a isa Float64 # returns Bool
 
 
+
+
+
 # ----------------------------------------
 #                OPERATORS
 # ----------------------------------------
@@ -65,7 +67,8 @@ a isa Float64 # returns Bool
 #   =                        Assign 
 #                               It can be multiple if both sides
 #                               have the same number of arguments
-#   =                        Swap: x,y = y,x
+# x,y = y,x                  Swap
+# a,b = 1,2                  Tuple assignment
 
 # ARITHMETICS
 #   +                        Add
@@ -75,6 +78,7 @@ a isa Float64 # returns Bool
 #   ^                        Power
 #   %                        Remainder after division (≡ rem(x,y))
 #   ÷                        Integer divide
+# divrem()                   Quotient and remainder
 
 # LOGICAL
 #   !                        NOT
@@ -128,6 +132,9 @@ a isa Float64 # returns Bool
 #   ≤       . '\le'          less than or equals to
 #   ∈       . '\in'          element contained in set
 #   ∉       . '\notin'       element not contained in set
+
+
+
 
 
 # ----------------------------------------
@@ -215,6 +222,7 @@ interpolString = "Gretings from $planet, the $(1+2)rd planet!"
 arr = [10, 20, 30, 40]
 arrStr = ["aa","ee","i","oooo","uuu"]
 arrMix = [10,"aa",["30",2.0]]
+
 # ADDRESSING
 # There is no need to care for UTF-8 problems (non-byte aligment)
 # Numeration starts in 1 and ends in end
@@ -239,6 +247,7 @@ uStr = uppercase.(arrStr) # Apply function on all elements
 
 
 
+
 # ----------------------------------------
 #               DICTIONARY
 # ----------------------------------------
@@ -253,6 +262,31 @@ dictEmpty["one"] = "uno" # Add entry in dictionary
 L = length(dictEmpty)    # Length (No. entries)
 ks = keys(dictNotEm)     # Keys
 vs = values(dictNotEm)   # Values
+
+
+
+
+# ----------------------------------------
+#                TUPLES
+# ----------------------------------------
+# A Tuple is a comma-separated list of values
+# CREATION
+a = 'a', 1, 4, '456'     # Created as list
+b = (2,4,'t',[1 2])      # Created as list with parentheses
+b = tuple(2,4,'t',[1 2]) # Created with function
+v = ('a',)               # Tuple with a single element
+t = tuple()              # Empty tuple
+
+# OPERATIONS
+# - Mostly the same as Array, but the elements are immutable
+# - Comparison works from 1 to end.
+#     If one is not the same, it stops looking
+
+# PURPOSE
+# - Used for return multiple values
+# - Used for unknown No. multiple arguments
+# - USed for expanding (scattering) a tuple into several arguments
+
 
 
 
@@ -339,11 +373,22 @@ end
 # It is good practice to signal if the function modifies the arguments
 #   appending '!' to the end of the function name
 
+# CREATION
 function myNewFunction(numerito)
     println(string(numerito))
     resultado = "Todo perfecto."
     return resultado
 end
+
+# MULTIPLE INPUTS/RETURNS
+#=  Multiple input:
+=#
+#   Returning a tuple and assigning it at the output
+function funcionMultiple(numeritos)
+    
+end
+
+
 
 
 
