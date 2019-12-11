@@ -15,6 +15,22 @@ a = "A"
 #   Nothing
 n = nothing
 
+# SCOPE
+# Global
+#   Indicate that it points to the global variable of that name
+#   If mutable, not needed
+#   It is good practice to declare them as constants in Main
+#   They impact performance
+global alastor = 0  
+# Constants
+#   Indicate that the variable will no vary anymore
+#   For immutable, it cannot change
+#   For mutable, always points to the same place
+const moody = 0
+const a = [1,2]
+a[1] = 4
+
+
 # NAMING
 a = 1.0
 #    Type LaTeX equivalent (\varepsilon here) and press TAB
@@ -45,23 +61,63 @@ a isa Float64 # returns Bool
 # ----------------------------------------
 #                OPERATORS
 # ----------------------------------------
+# ASSIGNMENT
+#   =                        Assign 
+#                               It can be multiple if both sides
+#                               have the same number of arguments
+#   =                        Swap: x,y = y,x
+
 # ARITHMETICS
-#   +                        Addition
-#   -                        Substraction
-#   /                        Float division
-#   ^                        Exponentiation
-#   %                        Modulo
-#   ÷                        Integer division
-#   +=                       Increment by
-#   -=                       Decrement by
+#   +                        Add
+#   -                        Substract
+#   /                        Divide
+#   \                        Inverse divide (a/b = b\a)
+#   ^                        Power
+#   %                        Remainder after division (≡ rem(x,y))
+#   ÷                        Integer divide
 
 # LOGICAL
+#   !                        NOT
 #   &&                       AND
 #   ||                       OR
-#   !                        NOT
+
+# BITWISE
+#   ~                        Bitwise NOT
+#   &                        Bitwise AND
+#   |                        Bitwise OR
+#   ⊻                        Bitwise XOR
+#   >>>                      Logical shift right
+#   >>                       Arithmetic shift right
+#   <<                       Logical/Arithmetic shift left
+
+# UPDATING OPERATORS
+#   +=                       Increment by
+#   -=                       Decrement by
+#   *=                       Multiply by
+#   *=                       Multiply by
+#   /=                       Divide by
+#   \=                       Inverse divide by
+#   ÷=                       Integer divide by
+#   %=                       Remainder after divided by
+#   ^=                       To the power of
+#   &=                       After bitwise AND
+#   |=                       After bitwise OR
+#   ⊻=                       After bitwise XOR
+#   >>>=                     After logical shift right
+#   >>=                      After lrithmetic shift right
+#   <<=                      After logical/arithmetic shift left
 
 # COMPARISON
-#   ==                       equals. If immutable, check byte-by-byte; else, address 
+#   ==                       equals (calling isequal() )
+#                               For objects: define isequal(x,y)
+#                                   as defining hash(x) == hash(y)
+#   ≡                        same-object-equals
+#                               1. Checks if same type
+#                               2. If mutable, check addresses
+#                               3. If immutable bits, check bitwise
+#                               4. If immutable collection, check === on all elements
+#   ===                      same-object-equals
+#   is                       same-object-equals
 #   !=                       not equals
 #   ≠       . '\ne'          not equals
 #   >                        greater than
@@ -77,17 +133,20 @@ a isa Float64 # returns Bool
 # ----------------------------------------
 #                STRINGS
 # ----------------------------------------
-# CHARACTER
+# CHARACTER (Char)
 #   They encode the Unicode 12.1 charset
-a = "A"
+a = 'A'
 
-# STRINGS
+# STRINGS (String)
 #= 
 - They are the same as arrays of Char
 - However, non-ASCII value occupy more than a byte.
   Thus, adressing them cannot be done as usual if 
   values in array are non-ASCII
-- Strings are immutable: z[1] = 'x' is forbidden.
+- Strings are immutable: 
+    · z[1] = 'x' is forbidden.
+    · (a = 'ba') == (b = 'ba')
+    · (a = 'ba') === (b = 'ba')
 - Numeration starts in 1 and ends in end
 =#
 z = "Z-"
@@ -121,6 +180,8 @@ a = lowercase("AA")     # Lowercase whole string
 z = lowercasefirst("ZZ")
                         # Lowercase first Char of whole string
 t = collect("Aszer")    # Create Char array from String
+t = split("La frasa 1") # Split String using spaces
+t = split("E-io-s",'-') # Split String using delimiter
 
 # FINDING
 rango = findfirst("an","dianosesan")
@@ -178,6 +239,20 @@ uStr = uppercase.(arrStr) # Apply function on all elements
 
 
 
+# ----------------------------------------
+#               DICTIONARY
+# ----------------------------------------
+# Dict are hash-ordered, so lookup takes O(1) time
+# CREATION
+dictEmpty = Dict()       # Empty dictionary (types Any, Any)
+dictNotEm = Dict("one" => "uno","two" => "dos", "three" => "tres")
+                         # Non- empty dictionary
+dictEmpty["one"] = "uno" # Add entry in dictionary
+
+# OPERATIONS
+L = length(dictEmpty)    # Length (No. entries)
+ks = keys(dictNotEm)     # Keys
+vs = values(dictNotEm)   # Values
 
 
 
