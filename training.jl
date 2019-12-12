@@ -148,8 +148,7 @@ a = 'A'
 #= 
 - They are the same as arrays of Char
 - However, non-ASCII value occupy more than a byte.
-  Thus, adressing them cannot be done as usual if 
-  values in array are non-ASCII
+  Thus, adressing them cannot be done as usual if values in array are non-ASCII
 - Strings are immutable: 
     · z[1] = 'x' is forbidden.
     · (a = 'ba') == (b = 'ba')
@@ -382,6 +381,7 @@ end
 
 # MULTIPLE INPUTS/RETURNS
 #=  Multiple input:
+If a tuple contains all arguments, instead of manually a
 =#
 #   Returning a tuple and assigning it at the output
 function funcionMultiple(numeritos)
