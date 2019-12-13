@@ -251,10 +251,12 @@ uStr = uppercase.(arrStr) # Apply function on all elements
 #               DICTIONARY
 # ----------------------------------------
 # Dict are hash-ordered, so lookup takes O(1) time
+# Keys MUST BE HASHABLE
 # CREATION
 dictEmpty = Dict()       # Empty dictionary (types Any, Any)
 dictNotEm = Dict("one" => "uno","two" => "dos", "three" => "tres")
                          # Non- empty dictionary
+dict2 = [(1,"1"),(2,"2")]# Using tuples
 dictEmpty["one"] = "uno" # Add entry in dictionary
 
 # OPERATIONS
@@ -270,7 +272,7 @@ vs = values(dictNotEm)   # Values
 # ----------------------------------------
 # A Tuple is a comma-separated list of values
 # CREATION
-a = 'a', 1, 4, '456'     # Created as list
+a = 'a', 1, 4, "456"     # Created as list
 b = (2,4,'t',[1 2])      # Created as list with parentheses
 b = tuple(2,4,'t',[1 2]) # Created with function
 v = ('a',)               # Tuple with a single element
@@ -280,11 +282,28 @@ t = tuple()              # Empty tuple
 # - Mostly the same as Array, but the elements are immutable
 # - Comparison works from 1 to end.
 #     If one is not the same, it stops looking
+a1,a2,a3,a4 = a...       # Scatter / Splat
 
 # PURPOSE
+# - Perform better than arrays (CPU, memory)
 # - Used for return multiple values
 # - Used for unknown No. multiple arguments
 # - USed for expanding (scattering) a tuple into several arguments
+
+
+# ----------------------------------------
+#                ITERATORS
+# ----------------------------------------
+# Objects that can be iterated on
+a = [1,2,3]              # Lists
+b = (1,2,3)              # Tuples
+dictEmpty                # Dictionaries:
+                         #  iterated as (key, value)
+z = zip(a,b)             # Zip iterator, combines elementwise
+                         # elements from given sequences until
+                         # one of them is exhausted. There can
+                         # be more than 2 sequences.
+ennum = enumerate(a)     # Returns tuples (index,element)
 
 
 
@@ -324,6 +343,11 @@ end
 for i in eachindex(a)
     println(a[i])
 end
+#   Zip iteration (parentheses are compulsory)
+for (thing1, thing2) in z
+    println(thing1)
+    println(thing2)
+end
 
 # WHILE
 n = 0
@@ -334,6 +358,16 @@ while n ≥ -7
     else
         break
     end
+end
+
+# TRY/CATCH
+# Try code, catch possible exceptions, runs finally either way
+try
+    println("a")
+catch exc
+    println("b")
+finally
+    println("c")
 end
 
 
@@ -380,13 +414,31 @@ function myNewFunction(numerito)
 end
 
 # MULTIPLE INPUTS/RETURNS
-#=  Multiple input:
-If a tuple contains all arguments, instead of manually a
+#=  Multiple input
+If a tuple contains all arguments, 
+instead of manually assign all the arguments
 =#
-#   Returning a tuple and assigning it at the output
-function funcionMultiple(numeritos)
-    
+#= Multiple output
+Returning a tuple and assigning it at the output
+=#
+#= Unknown No. of inputs (gathering, slurping)
+A parameter name ending in '...' 
+It can be called anything, but it is usual 'args'
+=#
+#= Multiple input from one variable (scattering, splattering)
+If all needed inputs are contained in a tuple, they 
+can be splitted into several different arguments 
+using '...' after the tuple in the call to 
+the function.
+=#
+numeritos = (1,2,3)
+function funcionMultiple(a,b,c,agg...)
+    println(a)
+    println(b)
+    println(c)
+    println(agg)
 end
+funcionMultiple(numeritos...,"a","b",3)
 
 
 
@@ -397,6 +449,29 @@ end
 # ----------------------------------------
 # USER INTERACTION
 text = readline()
+arc = "test.txt"
+# FILES
+cwd = pwd()                  # Get working directory
+checker = ispath(arc)        # Check if exists
+checker = isdir(arc)         # Check if directory
+checker = isfile(arc)        # Check if file
+tree = readdir(cwd)          # Array with contents of argument
+                             # Use 'isdir' to avoid errors
+pcomplete = joinpath(cwd,arc)# Join dir to file to get
+                             # full path
+
+# FILE OPENING
+fout = open("test.txt","w")  # Open for writing
+                             # CLEARS PREVIOUS CONTENT
+fout = open("test.txt")
+
+# FILE WRITING
+write(fout,"A string to be written\n")
+                             # Write argument in file.
+                             # ALWAYS A STRING
+print(fout,"A string $numeritos")
+                             # Use 'print' capabilities
+# @printf is also available (see MACROS)
 
 
 # ----------------------------------------
@@ -411,11 +486,22 @@ press 'Ctrl+C' to abort long operations =#
 Type in cmd 'julia name_of_the_script.jl' =#
 
 
+
+# ----------------------------------------
+#        USEFUL MODULES AND PACKAGES
+# ----------------------------------------
+# Random
+# https://github.com/JuliaCollections
+# Profile
+
+
 # ----------------------------------------
 #                MACROS
 # ----------------------------------------
 # @svg executes a macro that draws an SVG picture
 # @show stores the value of the variables passed and prints them
+# @printf uses C printing to file or console
 a = 1
 b = 2
 @show a b
+
