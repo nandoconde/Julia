@@ -339,7 +339,7 @@ a = [10, 20, 30, 40]
 for i in a
     println(i)
 end
-#   Array iteration by index
+#   Array iteration by index (RETURNS THE FASTEST PATH FOR ITRATION)
 for i in eachindex(a)
     println(a[i])
 end
@@ -391,6 +391,10 @@ function funcionDocumentable(argumento1, argumento2)
     println(argumento1)
     println(argumento2)
 end
+
+# DOCUMENTATION
+# Use packages Literate and Documenter
+
 
 
 
@@ -477,22 +481,30 @@ print(fout,"A string $numeritos")
 # ----------------------------------------
 #                EXECUTION
 # ----------------------------------------
-#= 1. REPL: 
+#= REPL
 Typle 'julia' in cmd. 
 Press 'Ctrl+D' to exit, 
-press 'Ctrl+C' to abort long operations =#
+press 'Ctrl+C' to abort long operations 
+=#
 
-#= 2. Script:
-Type in cmd 'julia name_of_the_script.jl' =#
+#= SCRIPT
+Type in cmd 'julia name_of_the_script.jl' 
+=#
 
 
 
 # ----------------------------------------
 #        USEFUL MODULES AND PACKAGES
 # ----------------------------------------
+# Literate
+# Documenter
 # Random
 # https://github.com/JuliaCollections
 # Profile
+# Optim
+# BlackBoxOptim
+# LsqFit
+# Manifolds
 
 
 # ----------------------------------------
@@ -501,6 +513,8 @@ Type in cmd 'julia name_of_the_script.jl' =#
 # @svg executes a macro that draws an SVG picture
 # @show stores the value of the variables passed and prints them
 # @printf uses C printing to file or console
+# @inbounds disables bounds checking for arrays, making software faster.
+    # Use this for numerical software
 a = 1
 b = 2
 @show a b
