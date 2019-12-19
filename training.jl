@@ -21,7 +21,7 @@ n = nothing
 #   If mutable, not needed
 #   It is good practice to declare them as constants in Main
 #   They impact performance
-global alastor = 0  
+global alastor = 0
 # Constants
 #   Indicate that the variable will no vary anymore
 #   For immutable, it cannot change
@@ -52,9 +52,12 @@ float(2)
 
 # INFORMATION
 # Know type
-f = typeof(ε) # Returns interface of type 
+f = typeof(ε) # Returns interface of type
 # Check type
 a isa Float64 # returns Bool
+
+# TYPE DECLARATION
+x::Float64 = 100            # Declares a variable with defined type
 
 
 
@@ -64,7 +67,7 @@ a isa Float64 # returns Bool
 #                OPERATORS
 # ----------------------------------------
 # ASSIGNMENT
-#   =                        Assign 
+#   =                        Assign
 #                               It can be multiple if both sides
 #                               have the same number of arguments
 # x,y = y,x                  Swap
@@ -126,7 +129,7 @@ a isa Float64 # returns Bool
 #   ≠       . '\ne'          not equals
 #   >                        greater than
 #   >=                       greater than or equals to
-#   ≥       . '\ge'          greater than or equals to   
+#   ≥       . '\ge'          greater than or equals to
 #   <                        less than
 #   <=                       less than or equals to
 #   ≤       . '\le'          less than or equals to
@@ -145,11 +148,11 @@ a isa Float64 # returns Bool
 a = 'A'
 
 # STRINGS (String)
-#= 
+#=
 - They are the same as arrays of Char
 - However, non-ASCII value occupy more than a byte.
   Thus, adressing them cannot be done as usual if values in array are non-ASCII
-- Strings are immutable: 
+- Strings are immutable:
     · z[1] = 'x' is forbidden.
     · (a = 'ba') == (b = 'ba')
     · (a = 'ba') === (b = 'ba')
@@ -164,8 +167,8 @@ ee = z[:]               # Whole string
 I = nextind(a,7)        # Next valid index to address substring
 I = firstindex(a)       # First valid index to address substring
 b = a[1:5]              #= Slice (substring) from 1 to 5 included
-                           If second index is greater, returns 
-                           empty array/string 
+                           If second index is greater, returns
+                           empty array/string
                         =#
 
 # OPERATIONS
@@ -192,19 +195,19 @@ t = split("E-io-s",'-') # Split String using delimiter
 # FINDING
 rango = findfirst("an","dianosesan")
                         #= Returns numerical array of inidces
-                           where the first occurrence happens 
+                           where the first occurrence happens
                         =#
 rango = findnext("an","dianosesan",4)
                         #= Returns numerical array of inidces
                            where the next occurrence happens
-                           after given index 
+                           after given index
                         =#
 existencia = "a" ∈ "abc"# Checks if element is in string
 
 # INTERPOLATION
-#= 
+#=
 Used to introduce variables into strings as ({s,f}printf)
-Variables can be expressions if inside brackets 
+Variables can be expressions if inside brackets
 =#
 planet = "Earth"
 interpolString = "Gretings from $planet, the $(1+2)rd planet!"
@@ -289,6 +292,31 @@ a1,a2,a3,a4 = a...       # Scatter / Splat
 # - Used for return multiple values
 # - Used for unknown No. multiple arguments
 # - USed for expanding (scattering) a tuple into several arguments
+
+
+# ----------------------------------------
+#           STRUCTS AND OBJECTS
+# ----------------------------------------
+# IMMUTABLE STRUCT
+#  - More efficient
+#  - Inviolable
+#  - Behaves as immutable
+#  - When checked with ≡ and ===, returns true is same byte content
+struct Estructura
+    a                     # Attribute/Field
+    b                     # Attribute/Field
+end
+
+# MUTABLE STRUCT
+#  - Fields can be changed
+#  - Functions that receive them must end with "!"
+mutable struct EstructMut
+    a                     # Attribute/Field
+    b                     # Attribute/Field
+end
+E = Estructura(1,2)
+println(string(E.x))
+F = EstructMut(1,2)
 
 
 # ----------------------------------------
@@ -380,8 +408,8 @@ b = #= Midline and multi-line
 comments =# 3.0
 
 # DOCSTRINGS
-#   Functions: before function. First line contains header, 
-#              next paragraph a description. 
+#   Functions: before function. First line contains header,
+#              next paragraph a description.
 """
 funcionDocumentable(argumento1, argumento2)
 
@@ -390,6 +418,17 @@ Prints both arguments.
 function funcionDocumentable(argumento1, argumento2)
     println(argumento1)
     println(argumento2)
+end
+
+"""
+Represents a rectangle.
+
+fields: width, height, corner.
+"""
+struct Rectangle
+    width
+    height
+    corner
 end
 
 # DOCUMENTATION
@@ -406,7 +445,7 @@ end
    - What follows 'return'
    - The last evaluated expression
 =#
-# Return terminates the function. 
+# Return terminates the function.
 # It is good practice to signal if the function modifies the arguments
 #   appending '!' to the end of the function name
 
@@ -419,20 +458,20 @@ end
 
 # MULTIPLE INPUTS/RETURNS
 #=  Multiple input
-If a tuple contains all arguments, 
+If a tuple contains all arguments,
 instead of manually assign all the arguments
 =#
 #= Multiple output
 Returning a tuple and assigning it at the output
 =#
 #= Unknown No. of inputs (gathering, slurping)
-A parameter name ending in '...' 
+A parameter name ending in '...'
 It can be called anything, but it is usual 'args'
 =#
 #= Multiple input from one variable (scattering, splattering)
-If all needed inputs are contained in a tuple, they 
-can be splitted into several different arguments 
-using '...' after the tuple in the call to 
+If all needed inputs are contained in a tuple, they
+can be splitted into several different arguments
+using '...' after the tuple in the call to
 the function.
 =#
 numeritos = (1,2,3)
@@ -444,6 +483,16 @@ function funcionMultiple(a,b,c,agg...)
 end
 funcionMultiple(numeritos...,"a","b",3)
 
+# METHODS
+# A method is a function with a defined header:
+#   not all types are allowed
+function increment(time::Int64, seconds::Int64)
+    seconds += timetoint(time)
+    inttotime(seconds)
+end
+
+# CONSTRUCTORS
+# Functions that create objects
 
 
 
@@ -456,6 +505,7 @@ text = readline()
 arc = "test.txt"
 # FILES
 cwd = pwd()                  # Get working directory
+apath = abspath(arc)         # Get absolute path
 checker = ispath(arc)        # Check if exists
 checker = isdir(arc)         # Check if directory
 checker = isfile(arc)        # Check if file
@@ -471,25 +521,61 @@ fout = open("test.txt")
 
 # FILE WRITING
 write(fout,"A string to be written\n")
-                             # Write argument in file.
-                             # ALWAYS A STRING
+                             # Write argument in file. ALWAYS A STRING.
 print(fout,"A string $numeritos")
                              # Use 'print' capabilities
 # @printf is also available (see MACROS)
+
+# DATABASES: see online. Also SERIALIZATION
+
+# SHELL INTERACTION
+cmd = `git pull`             # Command for system shell. Use backticks
+run(cmd)                     # Run command
+                             #   Throws exception if shell ends badly.
+a = read(cmd, String)        # Read output of command
+
 
 
 # ----------------------------------------
 #                EXECUTION
 # ----------------------------------------
 #= REPL
-Typle 'julia' in cmd. 
-Press 'Ctrl+D' to exit, 
-press 'Ctrl+C' to abort long operations 
+Typle 'julia' in cmd.
+Press 'Ctrl+D' to exit,
+press 'Ctrl+C' to abort long operations
 =#
 
 #= SCRIPT
-Type in cmd 'julia name_of_the_script.jl' 
+Type in cmd 'julia name_of_the_script.jl'
 =#
+
+
+# ----------------------------------------
+#       SCRIPTS, MODULES AND PACKAGES
+# ----------------------------------------
+# SCRIPTS
+# A file with Julia commands is a script.
+# When called, it uses the same variable workspace as the caller.
+include("script.jl")         # Execute content of script.
+
+
+# MODULES
+# A block that avoids naming conflicts because it's outside the variable
+# workspace of the caller.
+module ModuleName
+    export functionexport    # Exports function to caller so it can be used
+                             # without need of using 'dot-addressing'.
+
+    function yesExport(argumentos)
+        println(argumentos)  # Executable part of function
+    end
+    function noExport(args)
+        println(args)        # Executable part of function
+    end
+end
+using ModuleName             # Use exports of module
+import ModuleName.noExport   # Use specific variable/function, dot-addressing
+
 
 
 
@@ -510,6 +596,7 @@ Type in cmd 'julia name_of_the_script.jl'
 # ----------------------------------------
 #                MACROS
 # ----------------------------------------
+# @assert is used for unit testing
 # @svg executes a macro that draws an SVG picture
 # @show stores the value of the variables passed and prints them
 # @printf uses C printing to file or console
@@ -518,4 +605,3 @@ Type in cmd 'julia name_of_the_script.jl'
 a = 1
 b = 2
 @show a b
-
