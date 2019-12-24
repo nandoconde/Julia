@@ -11,7 +11,12 @@ a = false
 a = 'C'
 #   String
 a = "A"
-#   Int64
+#   Integer {Int8, Int16, Int32, Int64, Int128} ∈ Int, UInt
+a = 8::Int64
+#   Floating point: {Float16, Float32, Float64} ∈ Float
+a = 1::Float64
+#   Complex{T}
+a = 6im
 #   Nothing
 n = nothing
 
@@ -41,11 +46,6 @@ println(π) # 3.1415926
 parse(Int64,"2")
 parse(Float64,"3.1415")
 
-# TRUNCATION
-#    Eliminates non integer part
-trunc(Int64,3.999) # 3
-trunc(Int64,-2.31) # -2
-
 # CASTING
 string(3)
 float(2)
@@ -58,6 +58,16 @@ a isa Float64 # returns Bool
 
 # TYPE DECLARATION
 x::Float64 = 100            # Declares a variable with defined type
+function alas()::Float64    # Declares a function with defined type for output
+    1.0
+end
+
+# PRECISION
+typemin(Int16)               # Lowest number that type can represent
+typemax(Int16)               # Highest number that type can represent
+eps(Float64)                 # Machine precision of type
+trunc(Int64,3.999)           # Truncation and return given type
+round(Int32, 3.999)          # Round and return given type
 
 
 
@@ -293,6 +303,11 @@ a1,a2,a3,a4 = a...       # Scatter / Splat
 # - Used for unknown No. multiple arguments
 # - USed for expanding (scattering) a tuple into several arguments
 
+# NAMED TUPLES
+x = (a=1,b=2)
+b = x.a
+
+
 
 # ----------------------------------------
 #           STRUCTS AND OBJECTS
@@ -317,6 +332,29 @@ end
 E = Estructura(1,2)
 println(string(E.x))
 F = EstructMut(1,2)
+
+# FUNCTIONS
+a = deepcopy(E)           # Creates full (different) copy
+b = fieldnames(EstructMut)# Get field names of struct
+defi = fieldnames(E,:a)   # Check if fieldname exists
+
+# TYPES
+# Fields can be given explicit types
+# struct Estructura
+#     a::Float64            # Attribute/Field
+#     b::Float64            # Attribute/Field
+# end
+
+# ABSTRACT TYPES
+# Parent types to others. Enable polymorphism.
+# If no parent type is given when creating a struct, 'Any' is assumed.
+# When checking with 'isa' renders true.
+# This allows defining functions for the abstract types so all children inherit.
+abstract type Cacca end
+struct Shit <: Cacca
+    a
+end
+supertype(Shit)              # Returns direct parent type of given type
 
 
 # ----------------------------------------
@@ -397,6 +435,12 @@ catch exc
 finally
     println("c")
 end
+
+# TERNARY OPERATOR
+a = 1
+a ≧ 1 ? println("Mayor") : println("Menor")
+
+
 
 
 # ----------------------------------------
@@ -487,12 +531,56 @@ funcionMultiple(numeritos...,"a","b",3)
 # A method is a function with a defined header:
 #   not all types are allowed
 function increment(time::Int64, seconds::Int64)
-    seconds += timetoint(time)
-    inttotime(seconds)
+    println(string(time))
+    println(string(seconds))
+end
+# If followed by a type definition, the function is only allowed to return
+# said type. (It improves speed?)
+methods(increment)               # Show all methods called 'increment'
+                                 #   and their signature.
+
+# DEFAULT
+# Use default values for variable arguments if not given
+function faF(a=1,b=2)
+    println(a)
+    println(b)
 end
 
 # CONSTRUCTORS
-# Functions that create objects
+# Functions that create objects. They can be defined:
+#  - Outside the structs (outer constructors)
+#  - Within the structs (inner constructors)
+# Inner constructors allow enforcing conditions on arguments, or allow defaults
+mutable struct Cosa
+    a
+    b
+    function Cosa(a=1::Int64,b=2::Int64)
+        @assert(a<b,"a needs to be smaller than b")
+        cosa = new()         # Function 'new()' creates a new object of the type
+        cosa.a = a           #   in the struct. This function is only available
+        cosa.b = b           #   within the struct.
+        cosa
+    end
+end
+
+# COMPACT FUNCTIONS
+# For math mostly, defined in quick way
+f(x,y) = x^y
+
+# ANONYMOUS FUNCTIONS
+# Defined without a name. Given as arguments for other functions (e.g.: plot)
+x -> x^2 + 2x -1             # No name for the function
+function (x)
+    x^2 + 2x -1              # No name for the function
+end
+
+# NAMED ARGUMENTS
+# Define optional arguments using a different order.
+# Semicolon is needed when defining between keywork and sequential arguments.
+# Semicolon is not needed when calling.
+function arsagHan (a, b; style="uno", lineType="dos")
+
+end
 
 
 
@@ -563,7 +651,7 @@ include("script.jl")         # Execute content of script.
 # A block that avoids naming conflicts because it's outside the variable
 # workspace of the caller.
 module ModuleName
-    export functionexport    # Exports function to caller so it can be used
+    export yesExport, noExport    # Exports function to caller so it can be used
                              # without need of using 'dot-addressing'.
 
     function yesExport(argumentos)
@@ -574,7 +662,17 @@ module ModuleName
     end
 end
 using ModuleName             # Use exports of module
-import ModuleName.noExport   # Use specific variable/function, dot-addressing
+import ModuleName            # Use specific variable/function, dot-addressing
+
+
+
+# ----------------------------------------
+#               PARALLELISM
+# ----------------------------------------
+# TASKS
+# A task is a Control structure that passes cooperatively control without
+# returning. Implemented as a function with a Channel object as first argument.
+# A Channel passes values from function to the callee.
 
 
 
@@ -594,14 +692,42 @@ import ModuleName.noExport   # Use specific variable/function, dot-addressing
 
 
 # ----------------------------------------
+#                 BASE
+# ----------------------------------------
+# SHOW
+# Prints in console. Use multiple dispatch to add user-defined structs
+function Base.show(io::IO, cosa::Cosa)
+    print("a = $(cosa.a), b = $(cosa.b)")
+end
+
+# ARITHMETIC
+# If binary operator, define both ways (a+b and b+a)
+# Base.+
+# Base.-
+# Base.*
+# Base.<
+# Etc...
+
+
+# ----------------------------------------
 #                MACROS
 # ----------------------------------------
-# @assert is used for unit testing
+# @assert checks if something is true. If not, exception
+# @test is used for unit testing
+#   - If OK, "Test Passed"
+#   - If not, "Test Failed"
+# @test a ≈ b (\approx) tests equallity on floating point, supports tolerance.
+#   It is the same as @test isapprox(a,b). This function supports tolerance
 # @svg executes a macro that draws an SVG picture
 # @show stores the value of the variables passed and prints them
+# @which returns the kind of method used for an expression
 # @printf uses C printing to file or console
 # @inbounds disables bounds checking for arrays, making software faster.
     # Use this for numerical software
+cond1 = true
+cond2 = true
+@assert(cond1 && cond2, "String for failure")
+@test cond1 == cond2
 a = 1
 b = 2
 @show a b
