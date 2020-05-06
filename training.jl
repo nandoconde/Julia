@@ -663,7 +663,10 @@ module ModuleName
 end
 using ModuleName             # Use exports of module
 import ModuleName            # Use specific variable/function, dot-addressing
-
+# Module organization:
+#   It is good practice to group all types in a single 'types.jl' or similar file, 
+#   and all common utils in a 'utils.jl' file, and have them included at the 
+#   beginning of the module
 
 
 # ----------------------------------------
@@ -713,7 +716,7 @@ end
 #                MACROS
 # ----------------------------------------
 # @assert checks if something is true. If not, exception
-# @test is used for unit testing
+# @test is used for unit testing. 'Test' module must be imported (?)
 #   - If OK, "Test Passed"
 #   - If not, "Test Failed"
 # @test a ≈ b (\approx) tests equallity on floating point, supports tolerance.
