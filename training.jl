@@ -734,3 +734,47 @@ cond2 = true
 a = 1
 b = 2
 @show a b
+
+
+# ----------------------------------------
+#                   UI
+# ----------------------------------------
+# INTERACT
+# url: https://github.com/JuliaGizmos/Interact.jl
+# description: interactive widgets to play with Julia. Includes interactive 
+#              evaluation loops, very similar to MATLAB's Live Scripts.
+#              Compatible with Jupyter Notebooks but also as WebUI.
+# 
+# BLINK
+# url: https://github.com/JuliaGizmos/Blink.jl
+# description: wrap around Electron (web app builder), uses CSS, HTML and
+#              JavaScript. VS Code, Teams and Twitch are built on it.
+#              Electron allows writing desktop apps with web technologies.
+# 
+# ESCHER
+# url: https://github.com/JuliaGizmos/Escher.jl
+# description: complements the previous packages, wraps Mux middleware so 
+#              apps can be written using just Escher. ??
+#
+# GENIE
+# url: https://github.com/GenieFramework/Genie.jl
+# description: MVC web framework for web apps.
+#
+# Gtk
+# url: https://github.com/JuliaGraphics/Gtk.jl
+# description: Gtk wrapper in Julia (Unix UIs). Messy, better use web apps.
+#
+# Tk
+# url: https://github.com/JuliaGraphics/Tk.jl
+# description: Tk wrapper in Julia (universal UIs, using Tcl). Messy, better
+#              use web apps.
+
+
+# ----------------------------------------
+#                   GMSH
+# ----------------------------------------
+# url: http://gmsh.info/
+# docs: https://gmsh.info/doc/texinfo/gmsh.html
+# API: https://gitlab.onelab.info/gmsh/gmsh/tree/master/tutorial/julia
+# description: meshing/CAD software, with fully interface available for
+#              Julia. Download and explore, and once known, use for JSEM
